@@ -5,13 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,7 +43,7 @@ fun LoginScreen(navController: NavController) {
         Column {
             Text(
                 modifier = Modifier
-                    .padding(top = 100.dp)
+                    .padding(top = 120.dp)
                     .align(Alignment.CenterHorizontally), fontSize = 25.sp, text = "Login to"
             )
             Text(
@@ -57,27 +54,35 @@ fun LoginScreen(navController: NavController) {
         }
         Column(
             modifier = Modifier
+                .padding(top = 160.dp)
                 .wrapContentHeight()
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            val emailState = remember { mutableStateOf(TextFieldValue()) }
-            val passState = remember { mutableStateOf(TextFieldValue()) }
+            var emailState by remember { mutableStateOf(TextFieldValue()) }
+            var passState by remember { mutableStateOf(TextFieldValue()) }
             TextField(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 label = { Text("Email") },
-                value = emailState.value,
-                onValueChange = { emailState.value = it }
+                value = emailState,
+                onValueChange = { emailState = it }
             )
             TextField(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 label = { Text("Password") },
-                value = passState.value,
-                onValueChange = { passState.value = it }
+                value = passState,
+                onValueChange = { passState = it }
             )
-            Button(modifier = Modifier
+            Button(
+                modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 10.dp), onClick = { navController.navigate("main") }) {
+                .padding(top = 10.dp),
+                onClick = {
+                    if (emailState.text.isNotEmpty() && passState.text.isNotEmpty()) {
+                        navController.navigate("main")
+                    }
+                }
+            ) {
                 Text("Login")
             }
         }
