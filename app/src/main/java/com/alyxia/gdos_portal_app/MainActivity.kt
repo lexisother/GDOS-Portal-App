@@ -3,11 +3,14 @@ package com.alyxia.gdos_portal_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alyxia.gdos_portal_app.ui.theme.GDOSPortalAppTheme
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,6 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 fun LoginScreen(navController: NavController) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -61,12 +66,28 @@ fun LoginScreen(navController: NavController) {
         ) {
             var emailState by remember { mutableStateOf(TextFieldValue()) }
             var passState by remember { mutableStateOf(TextFieldValue()) }
+            var isErrored by remember { mutableStateOf(false) }
+            val pattern = "^[^@]+@[^@]+\\.[^@]+\$".toRegex()
+
             TextField(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 label = { Text("Email") },
                 value = emailState,
-                onValueChange = { emailState = it }
+                isError = isErrored,
+                onValueChange = {
+                    emailState = it
+                    isErrored = !emailState.text.contains(pattern)
+                }
             )
+            AnimatedVisibility(visible = isErrored) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(
+                        fontSize = 10.sp,
+                        color = MaterialTheme.colors.error,
+                        text = "Invalid Email!"
+                    )
+                }
+            }
             TextField(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 label = { Text("Password") },
@@ -75,10 +96,10 @@ fun LoginScreen(navController: NavController) {
             )
             Button(
                 modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 10.dp),
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 10.dp),
                 onClick = {
-                    if (emailState.text.isNotEmpty() && passState.text.isNotEmpty()) {
+                    if (emailState.text.isNotEmpty() && !isErrored && passState.text.isNotEmpty()) {
                         navController.navigate("main")
                     }
                 }
