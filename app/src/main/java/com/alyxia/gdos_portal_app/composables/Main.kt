@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.Card
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +20,7 @@ import com.alyxia.gdos_portal_app.ui.theme.GildeDarkBlue
 import com.alyxia.gdos_portal_app.ui.theme.GildeGrey
 import com.alyxia.gdos_portal_app.ui.theme.GildePink
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun Main(navController: NavController) {
@@ -80,14 +78,16 @@ fun Main(navController: NavController) {
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun IconCard(drawable: Int, desc: String, bgColor: Color) {
+fun IconCard(drawable: Int, desc: String, bgColor: Color, onClick: () -> Unit = {}) {
     Card(
         modifier = Modifier
             .padding(4.dp)
-            .height(100.dp)
+            .height(80.dp)
             .fillMaxWidth(),
-        backgroundColor = bgColor
+        backgroundColor = bgColor,
+        onClick = onClick
     ) {
         Image(
             painter = painterResource(drawable),

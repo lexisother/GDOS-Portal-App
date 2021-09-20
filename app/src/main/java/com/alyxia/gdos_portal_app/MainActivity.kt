@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.SideEffect
@@ -20,6 +21,7 @@ import com.alyxia.gdos_portal_app.ui.theme.GDOSPortalAppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "main") {
+                    NavHost(navController = navController, startDestination = "loginscreen") {
                         composable("loginscreen") { LoginScreen(navController) }
                         composable("main") { Main(navController) }
                     }

@@ -3,18 +3,21 @@ package com.alyxia.gdos_portal_app.composables
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-
 
 @ExperimentalAnimationApi
 @Composable
@@ -41,6 +44,7 @@ fun LoginScreen(navController: NavController) {
         ) {
             var emailState by remember { mutableStateOf(TextFieldValue()) }
             var passState by remember { mutableStateOf(TextFieldValue()) }
+            var passwordVisibility by remember { mutableStateOf(false) }
             var isErrored by remember { mutableStateOf(false) }
             val pattern = "^[^@]+@[^@]+\\.[^@]+\$".toRegex()
 
@@ -67,12 +71,23 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 label = { Text("Password") },
                 value = passState,
-                onValueChange = { passState = it }
+                onValueChange = { passState = it },
+                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                trailingIcon = {
+                    val image = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    IconButton(onClick = {
+                        passwordVisibility = !passwordVisibility
+                    }) {
+                        Icon(imageVector = image, "Show/Hide password")
+                    }
+                }
             )
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = com.alyxia.gdos_portal_app.ui.theme.GildeBlue),
                 onClick = {
                     if (emailState.text.isNotEmpty() && !isErrored && passState.text.isNotEmpty()) {
                         navController.navigate("main")
