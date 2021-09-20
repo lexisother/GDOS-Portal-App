@@ -61,7 +61,10 @@ fun Main(navController: NavController) {
                             IconCard(
                                 drawable = com.alyxia.gdos_portal_app.R.drawable.note_text,
                                 desc = "Notes",
-                                bgColor = GildeDarkBlue
+                                bgColor = GildeDarkBlue,
+                                onClick = {
+                                    navController.navigate("todo")
+                                }
                             )
                         }
                         item {

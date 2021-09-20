@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.alyxia.gdos_portal_app.ui.theme.GildeBlue
 
 @ExperimentalAnimationApi
 @Composable
@@ -87,7 +88,7 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 10.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = com.alyxia.gdos_portal_app.ui.theme.GildeBlue),
+                colors = ButtonDefaults.buttonColors(backgroundColor = GildeBlue),
                 onClick = {
                     if (emailState.text.isNotEmpty() && !isErrored && passState.text.isNotEmpty()) {
                         navController.navigate("main")
