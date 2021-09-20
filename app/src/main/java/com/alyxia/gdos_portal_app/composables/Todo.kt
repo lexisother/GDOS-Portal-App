@@ -2,10 +2,7 @@ package com.alyxia.gdos_portal_app.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
@@ -13,6 +10,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +29,12 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Todo")
+                    Column(
+                        modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("Todo")
+                    }
                 },
                 backgroundColor = Color(0xFF002F5D)
             )
@@ -42,8 +45,19 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 todoItems?.let { item ->
-                    items(item.entries.map { it.value }) { mod ->
-                        TodoItem(mod)
+                    if (item.isEmpty()) {
+                        item {
+                            Column(
+                                modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text("Nobody here but us chickens.")
+                            }
+                        }
+                    } else {
+                        items(item.entries.map { it.value }) { mod ->
+                            TodoItem(mod)
+                        }
                     }
                 }
             }
@@ -55,7 +69,7 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
 @Composable
 fun TodoItem(item: TodoDBItem) {
     var isDialogVisible by remember { mutableStateOf(false) }
-    
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,7 +104,6 @@ fun TodoItem(item: TodoDBItem) {
                         )
                         Text(item.content)
                     }
-
                 }
             }
         )

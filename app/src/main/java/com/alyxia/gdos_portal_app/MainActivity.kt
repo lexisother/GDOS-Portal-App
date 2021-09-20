@@ -57,7 +57,9 @@ class MainActivity : ComponentActivity() {
                     val coroutineScope = rememberCoroutineScope()
                     var result by remember { mutableStateOf<TodoDB?>(null) }
                     coroutineScope.launch(Dispatchers.IO) {
-                        val builtReq = Request.Builder().url("https://nova-vps.ml/~alyxia/api/todo.json").build()
+                        val builtReq =
+                            Request.Builder().url("https://nova-vps.ml/~alyxia/api/todo.json")
+                                .build()
                         val request = client.newCall(builtReq).execute()?.body()?.string()
                         if (request != null) {
                             result = with(Klaxon()) {

@@ -76,7 +76,8 @@ fun LoginScreen(navController: NavController) {
                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
-                    val image = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    val image =
+                        if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                     IconButton(onClick = {
                         passwordVisibility = !passwordVisibility
                     }) {
