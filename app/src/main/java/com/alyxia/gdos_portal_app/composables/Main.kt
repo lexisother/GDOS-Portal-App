@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.alyxia.gdos_portal_app.structures.User
 import com.alyxia.gdos_portal_app.ui.theme.GildeDarkBlue
 import com.alyxia.gdos_portal_app.ui.theme.GildeGrey
 import com.alyxia.gdos_portal_app.ui.theme.GildePink
@@ -21,7 +22,7 @@ import com.alyxia.gdos_portal_app.ui.theme.GildePink
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
-fun Main(navController: NavController) {
+fun Main(navController: NavController, user: User? = null) {
     Scaffold(
         topBar = {
             TopAppBar(

@@ -19,10 +19,8 @@ import androidx.navigation.compose.rememberNavController
 import com.alyxia.gdos_portal_app.composables.LoginScreen
 import com.alyxia.gdos_portal_app.composables.Main
 import com.alyxia.gdos_portal_app.composables.Todo
-import com.alyxia.gdos_portal_app.structures.TodoDB
-import com.alyxia.gdos_portal_app.structures.TodoDBItem
+import com.alyxia.gdos_portal_app.structures.UserDB
 import com.alyxia.gdos_portal_app.ui.theme.GDOSPortalAppTheme
-import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.Dispatchers
@@ -55,30 +53,30 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val coroutineScope = rememberCoroutineScope()
-                    var result by remember { mutableStateOf<TodoDB?>(null) }
+                    var result by remember { mutableStateOf<UserDB?>(null) }
                     coroutineScope.launch(Dispatchers.IO) {
                         val builtReq =
-                            Request.Builder().url("https://nova-vps.ml/~alyxia/api/todo.json")
+                            Request.Builder().url("https://nova-vps.ml/~alyxia/api/accounts.json")
                                 .build()
                         val request = client.newCall(builtReq).execute()?.body()?.string()
+                        println(request)
                         if (request != null) {
-                            result = with(Klaxon()) {
-                                return@with parse<Map<String, JsonObject>>(request)?.mapValues {
-                                    parseFromJsonObject<TodoDBItem>(it.value)!!
-                                }
-                            }
+                            result = Klaxon().parse<UserDB>(request)
                         }
                     }
 
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "loginscreen") {
-                        composable("loginscreen") { LoginScreen(navController) }
-                        composable("main") { Main(navController) }
-                        composable("todo") { Todo(navController, result) }
+                        composable("loginscreen") { result?.let { it1 ->
+                            LoginScreen(navController,
+                                it1
+                            )
+                        } }
+                        composable("main") { Main(navController, result!!.users[0]) }
+                        composable("todo") { Todo(navController, result!!.users[0].todo) }
                     }
                 }
             }
         }
     }
 }
-

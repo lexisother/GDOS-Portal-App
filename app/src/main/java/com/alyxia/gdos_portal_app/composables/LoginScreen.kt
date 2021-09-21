@@ -18,11 +18,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.alyxia.gdos_portal_app.structures.UserDB
 import com.alyxia.gdos_portal_app.ui.theme.GildeBlue
 
 @ExperimentalAnimationApi
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, userDB: UserDB) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Column {
             Text(
@@ -35,6 +36,9 @@ fun LoginScreen(navController: NavController) {
                 fontSize = 25.sp,
                 text = "Gilde DevOps Portal"
             )
+            userDB.users.map { user ->
+                Text(user.name)
+            }
         }
         Column(
             modifier = Modifier

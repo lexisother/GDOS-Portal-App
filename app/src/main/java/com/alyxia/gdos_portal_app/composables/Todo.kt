@@ -19,12 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
-import com.alyxia.gdos_portal_app.structures.TodoDB
-import com.alyxia.gdos_portal_app.structures.TodoDBItem
+import com.alyxia.gdos_portal_app.structures.TodoItem
 
 @ExperimentalComposeUiApi
 @Composable
-fun Todo(navController: NavController, todoItems: TodoDB?) {
+fun Todo(navController: NavController, todoItems: List<TodoItem> = emptyList()) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -44,8 +43,8 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
                 modifier = Modifier.padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                todoItems?.let { item ->
-                    if (item.isEmpty()) {
+                todoItems.let { items ->
+                    if (items.isEmpty()) {
                         item {
                             Column(
                                 modifier = Modifier.wrapContentHeight().fillMaxWidth(),
@@ -55,9 +54,11 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
                             }
                         }
                     } else {
-                        items(item.entries.map { it.value }) { mod ->
-                            TodoItem(mod)
-                        }
+                        items(items, null, {
+                            items.map { item ->
+                                TodoItem(item)
+                            }
+                        })
                     }
                 }
             }
@@ -67,7 +68,7 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
 
 @ExperimentalComposeUiApi
 @Composable
-fun TodoItem(item: TodoDBItem) {
+fun TodoItem(item: TodoItem) {
     var isDialogVisible by remember { mutableStateOf(false) }
 
     Card(

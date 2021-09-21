@@ -1,8 +1,17 @@
 package com.alyxia.gdos_portal_app.structures
 
-typealias UserDB = List<User>
+data class UserDB(
+    var users: List<User>
+)
 
 data class User(
-    val username: String,
-    val password: String
+    val name: String,
+    val email: String,
+    val password: String,
+    val todo: List<TodoItem>
+)
+
+data class TodoItem(
+    val name: String,
+    val content: String
 )
