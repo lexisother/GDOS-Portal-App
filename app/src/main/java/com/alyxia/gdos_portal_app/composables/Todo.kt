@@ -55,9 +55,7 @@ fun Todo(navController: NavController, todoItems: List<TodoItem> = emptyList()) 
                         }
                     } else {
                         items(items, null, {
-                            items.map { item ->
-                                TodoItem(item)
-                            }
+                            TodoItem(it)
                         })
                     }
                 }
@@ -80,7 +78,7 @@ fun TodoItem(item: TodoItem) {
         Column(
             modifier = Modifier.padding(15.dp)
         ) {
-            Text(item.name)
+            Text(item.title)
             Text(item.content)
         }
     }
@@ -101,7 +99,7 @@ fun TodoItem(item: TodoItem) {
                     ) {
                         Text(
                             fontSize = 20.sp,
-                            text = item.name
+                            text = item.title
                         )
                         Text(item.content)
                     }

@@ -36,9 +36,6 @@ fun LoginScreen(navController: NavController, userDB: UserDB) {
                 fontSize = 25.sp,
                 text = "Gilde DevOps Portal"
             )
-            userDB.users.map { user ->
-                Text(user.name)
-            }
         }
         Column(
             modifier = Modifier

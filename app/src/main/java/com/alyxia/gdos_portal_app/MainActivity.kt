@@ -13,12 +13,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.alyxia.gdos_portal_app.composables.LoginScreen
 import com.alyxia.gdos_portal_app.composables.Main
 import com.alyxia.gdos_portal_app.composables.Todo
+import com.alyxia.gdos_portal_app.structures.User
 import com.alyxia.gdos_portal_app.structures.UserDB
 import com.alyxia.gdos_portal_app.ui.theme.GDOSPortalAppTheme
 import com.beust.klaxon.Klaxon
@@ -59,7 +62,6 @@ class MainActivity : ComponentActivity() {
                             Request.Builder().url("https://nova-vps.ml/~alyxia/api/accounts.json")
                                 .build()
                         val request = client.newCall(builtReq).execute()?.body()?.string()
-                        println(request)
                         if (request != null) {
                             result = Klaxon().parse<UserDB>(request)
                         }
@@ -72,8 +74,10 @@ class MainActivity : ComponentActivity() {
                                 it1
                             )
                         } }
-                        composable("main") { Main(navController, result!!.users[0]) }
-                        composable("todo") { Todo(navController, result!!.users[0].todo) }
+                        composable(
+                            "main/{user}",
+                        arguments = listOf(navArgument("user") { type = NavType<User>() })) { Main(navController, result!!.users[0]) }
+                        composable("todo/{todoList}") { Todo(navController, result!!.users[0].todo) }
                     }
                 }
             }

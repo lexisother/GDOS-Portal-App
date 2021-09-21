@@ -12,6 +12,6 @@ data class User(
 )
 
 data class TodoItem(
-    val name: String,
+    val title: String,
     val content: String
 )
