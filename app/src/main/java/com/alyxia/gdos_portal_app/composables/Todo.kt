@@ -1,5 +1,6 @@
 package com.alyxia.gdos_portal_app.composables
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,13 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
+import com.alyxia.gdos_portal_app.R.drawable.*
 import com.alyxia.gdos_portal_app.structures.TodoDB
 import com.alyxia.gdos_portal_app.structures.TodoDBItem
+import com.alyxia.gdos_portal_app.ui.theme.Shapes
 
 @ExperimentalComposeUiApi
 @Composable
@@ -30,7 +35,9 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
             TopAppBar(
                 title = {
                     Column(
-                        modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text("Todo")
@@ -44,19 +51,28 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
                 modifier = Modifier.padding(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                todoItems?.let { item ->
-                    if (item.isEmpty()) {
+                todoItems?.let { items ->
+                    if (items.isEmpty()) {
                         item {
                             Column(
-                                modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+                                modifier = Modifier
+                                    .wrapContentHeight()
+                                    .fillMaxWidth(),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text("Nobody here but us chickens.")
                             }
                         }
                     } else {
-                        items(item.entries.map { it.value }) { mod ->
-                            TodoItem(mod)
+                        items(items.entries.map { it.value }) { item ->
+                            TodoItem(item = item, meta = {
+                                when (item.priority) {
+                                    null -> MetaItem("Priority", tbd_priority)
+                                    1 -> MetaItem("Priority", low_priority)
+                                    2 -> MetaItem("Priority", mid_priority)
+                                    3 -> MetaItem("Priority", high_priority)
+                                }
+                            })
                         }
                     }
                 }
@@ -67,7 +83,7 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
 
 @ExperimentalComposeUiApi
 @Composable
-fun TodoItem(item: TodoDBItem) {
+fun TodoItem(item: TodoDBItem, meta: @Composable () -> Unit = {}) {
     var isDialogVisible by remember { mutableStateOf(false) }
 
     Card(
@@ -79,11 +95,22 @@ fun TodoItem(item: TodoDBItem) {
         Column(
             modifier = Modifier.padding(15.dp)
         ) {
-            Text(item.name)
-            Text(item.content)
+            Text(
+                fontSize = 30.sp,
+                text = item.name
+            )
+            Row(
+                modifier = Modifier.padding(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                meta()
+            }
         }
     }
 
+    // NOTE: Not sure if I should keep this.
+    //    The only use there would be in a menu such as this, would be to manage the item
+    //    through e.g. a cog icon on the card, which opens the dialog, presenting some buttons.
     if (isDialogVisible) {
         Dialog(
             onDismissRequest = { isDialogVisible = false },
@@ -91,8 +118,10 @@ fun TodoItem(item: TodoDBItem) {
             content = {
                 Card(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(30.dp)
-                        .background(Color(0xFF2d2d2d))
+                        .background(Color(0xFF2d2d2d)),
+                    elevation = 10.dp
                 ) {
                     Column(
                         modifier = Modifier.padding(10.dp),
@@ -107,5 +136,27 @@ fun TodoItem(item: TodoDBItem) {
                 }
             }
         )
+    }
+}
+
+@Composable
+fun MetaItem(text: String, drawable: Int = 0) {
+    Card(
+        backgroundColor = Color(0xFF3d3d3d)
+    ) {
+        Row(
+            modifier = Modifier
+                .background(Color(0xFF3d3d3d), Shapes.large)
+                .padding(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            Image(
+                modifier = Modifier.padding(top = 4.dp),
+                painter = painterResource(drawable),
+                contentDescription = text,
+                contentScale = ContentScale.FillHeight,
+            )
+            Text(text)
+        }
     }
 }
