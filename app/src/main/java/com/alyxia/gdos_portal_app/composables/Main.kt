@@ -50,7 +50,10 @@ fun Main(navController: NavController) {
                             IconCard(
                                 drawable = com.alyxia.gdos_portal_app.R.drawable.clock,
                                 desc = "Clock",
-                                bgColor = GildeGrey
+                                bgColor = GildeGrey,
+                                onClick = {
+                                    navController.navigate("clockmanager")
+                                }
                             )
                         }
                         item {

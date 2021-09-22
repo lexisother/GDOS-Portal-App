@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.alyxia.gdos_portal_app.composables.ClockManager
 import com.alyxia.gdos_portal_app.composables.LoginScreen
 import com.alyxia.gdos_portal_app.composables.Main
 import com.alyxia.gdos_portal_app.composables.Todo
@@ -75,10 +76,10 @@ class MainActivity : ComponentActivity() {
                         composable("loginscreen") { LoginScreen(navController) }
                         composable("main") { Main(navController) }
                         composable("todo") { Todo(navController, result) }
+                        composable("clockmanager") { ClockManager() }
                     }
                 }
             }
         }
     }
 }
-

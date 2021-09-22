@@ -28,7 +28,9 @@ fun LoginScreen(navController: NavController) {
             Text(
                 modifier = Modifier
                     .padding(top = 120.dp)
-                    .align(Alignment.CenterHorizontally), fontSize = 25.sp, text = "Login to"
+                    .align(Alignment.CenterHorizontally),
+                fontSize = 25.sp,
+                text = "Login to"
             )
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
