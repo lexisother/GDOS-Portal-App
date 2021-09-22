@@ -64,7 +64,7 @@ fun Todo(navController: NavController, todoItems: TodoDB?) {
                             }
                         }
                     } else {
-                        items(items.entries.map { it.value }) { item ->
+                        items(items.values.sortedByDescending { it.priority ?: 0 }) { item ->
                             TodoItem(item = item, meta = {
                                 when (item.priority) {
                                     null -> MetaItem("Priority", tbd_priority)
